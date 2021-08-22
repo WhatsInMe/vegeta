@@ -41,11 +41,11 @@ app.post("/accounts", (req, res) => {
   });
 });
 
-// app.put("/accounts/:id", (req,res)=>{
-//   Account.findByPk(req.params.id).then(account=>{
-//     account?.update
-//   })
-// })
+app.put("/accounts/:id", (req, res) => {
+  Account.findByPk(req.params.id).then((account) => {
+    account?.update(req.body).then((account) => res.json(account));
+  });
+});
 
 app.listen(port, () => {
   console.log(`running on port ${port}`);
