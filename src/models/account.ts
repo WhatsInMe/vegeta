@@ -11,6 +11,10 @@ const Account = sequelize.define("account", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  token: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 export default Account;

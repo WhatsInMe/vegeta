@@ -2,6 +2,8 @@ import express from "express";
 import sequelize from "./util/con";
 import seed from "./util/seed";
 import Account from "./models/account";
+import bcryptjs from "bcryptjs";
+import jsonwebtoken from "jsonwebtoken";
 
 console.log("starting");
 
@@ -11,7 +13,7 @@ sequelize.sync({ force: true }).then(() => {
 });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8080;
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -34,14 +36,14 @@ app.get("/accounts/:id", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) =>
+app.post("/login", (req, res) => {
   Account.findAll({
     where: {
       email: req.body.email,
     },
   })
-    .then(([account]: any) => {
-      if (req.body.password === account.password) {
+    .then(async ([account]: any) => {
+      if (await bcryptjs.compare(req.body.password, account.password)) {
         res.json({ asdf: "ok" });
       } else {
         res
@@ -60,11 +62,14 @@ app.post("/login", (req, res) =>
           'Basic realm="Access to the staging site", charset="UTF-8"'
         )
         .sendStatus(401);
-    })
-);
+    });
+});
 
-app.post("/accounts", (req, res) => {
-  Account.create(req.body)
+app.post("/accounts", async (req, res) => {
+  Account.create({
+    email: req.body.email.toLowerCase(),
+    password: await bcryptjs.hash(req.body.password, 10),
+  })
     .then((account) => {
       res.json(account);
     })
