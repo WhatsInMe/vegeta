@@ -2,6 +2,7 @@ import express from "express";
 import sequelize from "./util/con";
 import seed from "./util/seed";
 import Account from "./models/account";
+import bodyParser from "body-parser";
 
 console.log("starting");
 
@@ -28,11 +29,23 @@ app.get("/accounts/:id", (req, res) => {
     where: {
       id: req.params.id,
     },
-  })
-  .then(accounts => {
-    return res.json(accounts)
+  }).then((accounts) => {
+    return res.json(accounts);
   });
 });
+
+app.use(express.json());
+app.post("/accounts", (req, res) => {
+  Account.create(req.body).then((account) => {
+    return res.json(account);
+  });
+});
+
+// app.put("/accounts/:id", (req,res)=>{
+//   Account.findByPk(req.params.id).then(account=>{
+//     account?.update
+//   })
+// })
 
 app.listen(port, () => {
   console.log(`running on port ${port}`);
