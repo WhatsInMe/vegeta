@@ -44,7 +44,17 @@ app.post("/login", (req, res) => {
   })
     .then(async ([account]: any) => {
       if (await bcryptjs.compare(req.body.password, account.password)) {
-        res.json({ asdf: "ok" });
+        const token = jsonwebtoken.sign(
+          {
+            email: account.email,
+          },
+          process.env.TOKEN_KEY || "asdfasdf"
+        );
+        Account.findByPk(account.id).then((account) => {
+          account
+            ?.update({ token: token })
+            .then((account) => res.json(account));
+        });
       } else {
         res
           .set(
