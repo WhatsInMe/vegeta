@@ -1,8 +1,7 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize(
-  "postgres://postgres:postgres@207.246.94.25:5434/postgres"
-);
+const DB = process.env.DB || "postgres://postgres:postgres@localhost:5432/postgres"
+const sequelize = new Sequelize(DB);
 
 sequelize
   .authenticate()
