@@ -12,6 +12,7 @@ sequelize.sync({ force: true }).then(() => {
 
 const app = express();
 const port = 3000;
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ message: "hello world!" });
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
 
 app.get("/accounts", (req, res) => {
   Account.findAll().then((accounts) => {
-    return res.json(accounts);
+    res.json(accounts);
   });
 });
 
@@ -28,16 +29,44 @@ app.get("/accounts/:id", (req, res) => {
     where: {
       id: req.params.id,
     },
-  }).then((accounts) => {
-    return res.json(accounts);
+  }).then(([account]: any) => {
+    res.json(account);
   });
 });
 
-app.use(express.json());
+app.post("/login", (req, res) =>
+  Account.findAll({
+    where: {
+      email: req.body.email,
+    },
+  })
+    .then(([account]: any) => {
+      if (req.body.password === account.password) {
+        res.json({ asdf: "ok" });
+      } else {
+        res
+          .set(
+            "WWW-Authenticate",
+            'Basic realm="Access to the staging site", charset="UTF-8"'
+          )
+          .sendStatus(401);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res
+        .set(
+          "WWW-Authenticate",
+          'Basic realm="Access to the staging site", charset="UTF-8"'
+        )
+        .sendStatus(401);
+    })
+);
+
 app.post("/accounts", (req, res) => {
   Account.create(req.body)
     .then((account) => {
-      return res.json(account);
+      res.json(account);
     })
     .catch((error) => {
       res.sendStatus(400);
