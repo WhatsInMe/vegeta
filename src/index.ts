@@ -35,9 +35,13 @@ app.get("/accounts/:id", (req, res) => {
 
 app.use(express.json());
 app.post("/accounts", (req, res) => {
-  Account.create(req.body).then((account) => {
-    return res.json(account);
-  });
+  Account.create(req.body)
+    .then((account) => {
+      return res.json(account);
+    })
+    .catch((error) => {
+      res.sendStatus(400);
+    });
 });
 
 app.put("/accounts/:id", (req, res) => {
