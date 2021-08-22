@@ -1,7 +1,7 @@
 import express from "express";
 import sequelize from "./util/con";
-import seed from "./util/seed"
-import Account from "./models/account"
+import seed from "./util/seed";
+import Account from "./models/account";
 
 console.log("starting");
 
@@ -18,9 +18,20 @@ app.get("/", (req, res) => {
 });
 
 app.get("/accounts", (req, res) => {
-  Account.findAll().then(accounts => {
-    return res.json(accounts)
+  Account.findAll().then((accounts) => {
+    return res.json(accounts);
+  });
+});
+
+app.get("/accounts/:id", (req, res) => {
+  Account.findAll({
+    where: {
+      id: req.params.id,
+    },
   })
+  .then(accounts => {
+    return res.json(accounts)
+  });
 });
 
 app.listen(port, () => {
