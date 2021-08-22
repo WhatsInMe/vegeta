@@ -2,7 +2,6 @@ import express from "express";
 import sequelize from "./util/con";
 import seed from "./util/seed";
 import Account from "./models/account";
-import bodyParser from "body-parser";
 
 console.log("starting");
 
@@ -45,6 +44,16 @@ app.put("/accounts/:id", (req, res) => {
   Account.findByPk(req.params.id).then((account) => {
     account?.update(req.body).then((account) => res.json(account));
   });
+});
+
+app.delete("/accounts/:id", (req, res) => {
+  Account.findByPk(req.params.id)
+    .then((account) => {
+      account?.destroy();
+    })
+    .then((account) => {
+      res.sendStatus(200);
+    });
 });
 
 app.listen(port, () => {
