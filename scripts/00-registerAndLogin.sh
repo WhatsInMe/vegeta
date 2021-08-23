@@ -1,7 +1,5 @@
 #!/bin/sh
 
-. ../.env
-
 #^ register
 
 echo
