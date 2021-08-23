@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
 import Account from "../models/account";
-import authenticate from "../middleware/authenticate"
+import authenticate from "../middleware/authenticate";
 
 const AccountController = (app: any) => {
   app.get("/", (req: any, res: any) => {

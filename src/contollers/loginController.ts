@@ -22,6 +22,7 @@ const LoginController = (express: any) => {
         if (await bcryptjs.compare(req.body.password, account.password)) {
           const token = jsonwebtoken.sign(
             {
+              id: account.id,
               email: account.email,
             },
             process.env.TOKEN_KEY || "asdfasdf"
