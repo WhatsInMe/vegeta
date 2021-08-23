@@ -1,5 +1,5 @@
 import jsonwebtoken from "jsonwebtoken";
-import { __TOKEN_KEY__ } from "../util/constants";
+import { __TOKEN_KEY__ } from "../utilities/constants";
 
 const authenticate = (req: any, res: any, next: any) => {
   const token =

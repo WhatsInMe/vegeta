@@ -1,9 +1,9 @@
 import jsonwebtoken from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import Account from "../models/account";
-import { __TOKEN_KEY__ } from "../util/constants";
+import { __TOKEN_KEY__ } from "../utilities/constants";
 
-const AccessDenied = (res: any) => {
+export const AccessDenied = (res: any) => {
   res
     .set(
       "WWW-Authenticate",
@@ -12,37 +12,33 @@ const AccessDenied = (res: any) => {
     .sendStatus(401);
 };
 
-const LoginController = (express: any) => {
-  express.post("/login", (req: any, res: any) => {
-    Account.findAll({
-      where: {
-        email: req.body.email,
-      },
-    })
-      .then(async ([account]: any) => {
-        if (await bcryptjs.compare(req.body.password, account.password)) {
-          const token = jsonwebtoken.sign(
-            {
-              id: account.id,
-              email: account.email,
-            },
-            __TOKEN_KEY__
-          );
-          // saves token in database
-          Account.findByPk(account.id).then((account) => {
-            account
-              ?.update({ token: token })
-              .then((account) => res.json(account));
-          });
-        } else {
-          AccessDenied(res);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+export const login = (req: any, res: any) => {
+  Account.findAll({
+    where: {
+      email: req.body.email,
+    },
+  })
+    .then(async ([account]: any) => {
+      if (await bcryptjs.compare(req.body.password, account.password)) {
+        const token = jsonwebtoken.sign(
+          {
+            id: account.id,
+            email: account.email,
+          },
+          __TOKEN_KEY__
+        );
+        // saves token in database
+        Account.findByPk(account.id).then((account) => {
+          account
+            ?.update({ token: token })
+            .then((account) => res.json(account));
+        });
+      } else {
         AccessDenied(res);
-      });
-  });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      AccessDenied(res);
+    });
 };
-
-export default LoginController;

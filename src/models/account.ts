@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../util/con";
+import sequelize from "../utilities/connection";
 
 const Account = sequelize.define("account", {
   email: {
@@ -11,10 +11,10 @@ const Account = sequelize.define("account", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  token: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
+  // token: {
+  //   type: DataTypes.STRING,
+  //   allowNull: true,
+  // },
 });
 
 export default Account;

@@ -1,60 +1,45 @@
-import bcryptjs from "bcryptjs";
 import Account from "../models/account";
-import authenticate from "../middleware/authenticate";
 
-const AccountController = (app: any) => {
-  app.get("/", (req: any, res: any) => {
-    res.json({ message: "hello world!" });
-  });
+export const helloWorld = (req: any, res: any) => {
+  res.json({ message: "hello world!" });
+};
 
-  app.get("/accounts", (req: any, res: any) => {
-    Account.findAll().then((accounts) => {
-      res.json(accounts);
-    });
-  });
+export const getAccount = (req: any, res: any) => {
+  // if (req.user.id != req.params.id) {
+  //   return res.sendStatus(401);
+  // }
 
-  app.get("/accounts/:id", authenticate, (req: any, res: any) => {
-    if (req.user.id != req.params.id) {
-      return res.sendStatus(401);
-    }
-    Account.findAll({
-      where: {
-        id: req.params.id,
-      },
-    }).then(([account]: any) => {
+  // Account.findAll({
+  //   where: {
+  //     id: req.params.id,
+  //   },
+  // })
+
+  Account.findByPk(req.params.id)
+    .then((account: any) => {
+      if (!account) {
+        return res.sendStatus(404);
+      }
       res.json(account);
-    });
-  });
-
-  app.post("/accounts", async (req: any, res: any) => {
-    Account.create({
-      email: req.body.email.toLowerCase(),
-      password: await bcryptjs.hash(req.body.password, 10),
     })
-      .then((account) => {
-        res.json(account);
-      })
-      .catch((error) => {
-        console.error(error);
-        res.sendStatus(400);
-      });
-  });
-
-  app.put("/accounts/:id", (req: any, res: any) => {
-    Account.findByPk(req.params.id).then((account) => {
-      account?.update(req.body).then((account) => res.json(account));
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(404);
     });
-  });
+};
 
-  app.delete("/accounts/:id", (req: any, res: any) => {
-    Account.findByPk(req.params.id)
-      .then((account) => {
-        account?.destroy();
-      })
-      .then((account) => {
-        res.sendStatus(200);
-      });
+export const updateAccount = (req: any, res: any) => {
+  Account.findByPk(req.params.id).then((account) => {
+    account?.update(req.body).then((account) => res.json(account));
   });
 };
 
-export default AccountController;
+export const deleteAccount = (req: any, res: any) => {
+  Account.findByPk(req.params.id)
+    .then((account) => {
+      account?.destroy();
+    })
+    .then((account) => {
+      res.sendStatus(200);
+    });
+};
