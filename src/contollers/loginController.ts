@@ -27,6 +27,7 @@ const LoginController = (express: any) => {
             },
             process.env.TOKEN_KEY || "asdfasdf"
           );
+          // saves token in database
           Account.findByPk(account.id).then((account) => {
             account
               ?.update({ token: token })

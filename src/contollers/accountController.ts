@@ -14,6 +14,9 @@ const AccountController = (app: any) => {
   });
 
   app.get("/accounts/:id", authenticate, (req: any, res: any) => {
+    if (req.user.id != req.params.id) {
+      return res.sendStatus(401);
+    }
     Account.findAll({
       where: {
         id: req.params.id,
@@ -32,6 +35,7 @@ const AccountController = (app: any) => {
         res.json(account);
       })
       .catch((error) => {
+        console.error(error);
         res.sendStatus(400);
       });
   });

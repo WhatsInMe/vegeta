@@ -1,4 +1,3 @@
-import Account from "../models/account";
 import jsonwebtoken from "jsonwebtoken";
 
 const authenticate = (req: any, res: any, next: any) => {
@@ -9,38 +8,14 @@ const authenticate = (req: any, res: any, next: any) => {
   }
 
   try {
-    console.log(
-      jsonwebtoken.verify(token, process.env.TOKEN_KEY || "asdfasdf")
-    );
-    console.log(
-      jsonwebtoken.verify(token, process.env.TOKEN_KEY || "asdfasdf")
-    );
-    console.log(
-      jsonwebtoken.verify(token, process.env.TOKEN_KEY || "asdfasdf")
-    );
-    console.log(
-      jsonwebtoken.verify(token, process.env.TOKEN_KEY || "asdfasdf")
-    );
-  } catch (error) {}
-
-  // Account.findByPk(req.params.id)
-  //   .then((account: any) => {
-  //     console.log("request token:")
-  //     console.log(token)
-  //     console.log(token)
-  //     console.log(token)
-  //     console.log(token)
-  //     console.log(token)
-  //     console.log("request token:")
-  //     console.log(account.token)
-  //     console.log(account.token)
-  //     console.log(account.token)
-  //     console.log(account.token)
-  //     console.log(account.token)
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+    // console.log(
+    //   jsonwebtoken.verify(token, process.env.TOKEN_KEY || "asdfasdf")
+    // );
+    req.user = jsonwebtoken.verify(token, process.env.TOKEN_KEY || "asdfasdf");
+  } catch (error) {
+    console.error(error);
+    return res.sendStatus(401);
+  }
 
   return next();
 };
