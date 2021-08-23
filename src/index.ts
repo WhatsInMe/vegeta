@@ -1,7 +1,8 @@
 import express from "express";
 import sequelize from "./util/con";
 import seed from "./util/seed";
-import SetupController from "./contollers/setupController"
+import SetupController from "./contollers/setupController";
+import { __PORT__ } from "./util/constants";
 
 console.log("starting");
 
@@ -11,11 +12,10 @@ sequelize.sync({ force: true }).then(() => {
 });
 
 const app = express();
-const port = process.env.PORT || 8080;
 app.use(express.json());
 
 SetupController(app);
 
-app.listen(port, () => {
-  console.log(`running on port ${port}`);
+app.listen(__PORT__, () => {
+  console.log(`running on port ${__PORT__}`);
 });

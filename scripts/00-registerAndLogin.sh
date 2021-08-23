@@ -9,8 +9,8 @@ echo "==========================================================================
 curl --location --request POST "http://localhost:${PORT}/accounts" \
     --header 'Content-Type: application/json' \
     --data-raw '{
-        "email": "kevinjames@gmail.com",
-        "password": "pass"
+        "email": "songoku@gmail.com",
+        "password": "gohan"
     }' | jq '.'
 
 #$
@@ -23,8 +23,8 @@ responseFile=$(mktemp /tmp/XXXXXXXXXX)
 curl --location --request POST "http://localhost:${PORT}/login" \
     --header 'Content-Type: application/json' \
     --data-raw '{
-        "email": "kevinjames@gmail.com",
-        "password": "pass"
+        "email": "songoku@gmail.com",
+        "password": "gohan"
     }' | tee $responseFile | jq '.'
 
 token=$(jq -r '.token' $responseFile)

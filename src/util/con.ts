@@ -1,8 +1,7 @@
 import { Sequelize } from "sequelize";
+import { __DB__ } from "./constants";
 
-const DB = process.env.DB || "postgres://postgres:postgres@localhost:5432/postgres"
-const sequelize = new Sequelize(DB);
-
+const sequelize = new Sequelize(__DB__);
 sequelize
   .authenticate()
   .then(() => {

@@ -1,6 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import Account from "../models/account";
+import { __TOKEN_KEY__ } from "../util/constants";
 
 const AccessDenied = (res: any) => {
   res
@@ -25,7 +26,7 @@ const LoginController = (express: any) => {
               id: account.id,
               email: account.email,
             },
-            process.env.TOKEN_KEY || "asdfasdf"
+            __TOKEN_KEY__
           );
           // saves token in database
           Account.findByPk(account.id).then((account) => {
