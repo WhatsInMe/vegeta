@@ -2,6 +2,15 @@ import jsonwebtoken from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import Account from "../models/account";
 
+const AccessDenied = (res: any) => {
+  res
+    .set(
+      "WWW-Authenticate",
+      'Basic realm="Access to the staging site", charset="UTF-8"'
+    )
+    .sendStatus(401);
+};
+
 const LoginController = (express: any) => {
   express.post("/login", (req: any, res: any) => {
     Account.findAll({
@@ -23,22 +32,12 @@ const LoginController = (express: any) => {
               .then((account) => res.json(account));
           });
         } else {
-          res
-            .set(
-              "WWW-Authenticate",
-              'Basic realm="Access to the staging site", charset="UTF-8"'
-            )
-            .sendStatus(401);
+          AccessDenied(res);
         }
       })
       .catch((error) => {
         console.error(error);
-        res
-          .set(
-            "WWW-Authenticate",
-            'Basic realm="Access to the staging site", charset="UTF-8"'
-          )
-          .sendStatus(401);
+        AccessDenied(res);
       });
   });
 };
