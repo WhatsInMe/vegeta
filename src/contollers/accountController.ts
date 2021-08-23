@@ -1,5 +1,15 @@
 import bcryptjs from "bcryptjs";
 import Account from "../models/account";
+import jsonwebtoken from "jsonwebtoken";
+
+const verifyToken = (req: any, res: any, next: any) => {
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+  if (!token) {
+    return res.status(403).send("A token is required.");
+  }
+  return next();
+};
 
 const AccountController = (app: any) => {
   app.get("/", (req: any, res: any) => {
@@ -12,7 +22,7 @@ const AccountController = (app: any) => {
     });
   });
 
-  app.get("/accounts/:id", (req: any, res: any) => {
+  app.get("/accounts/:id", verifyToken, (req: any, res: any) => {
     Account.findAll({
       where: {
         id: req.params.id,
@@ -52,4 +62,4 @@ const AccountController = (app: any) => {
   });
 };
 
-export default AccountController
+export default AccountController;
