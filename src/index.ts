@@ -6,16 +6,14 @@ import SetupController from "./contollers/setupController"
 console.log("starting");
 
 sequelize.sync({ force: true }).then(() => {
-  console.log("create tables");
-  seed();
+  // console.log("create tables");
+  // seed();
 });
 
 const app = express();
 const port = process.env.PORT || 8080;
 app.use(express.json());
 
-// AccountController(app);
-// LoginController(app);
 SetupController(app);
 
 app.listen(port, () => {
