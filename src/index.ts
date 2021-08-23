@@ -3,6 +3,7 @@ import sequelize from "./util/con";
 import seed from "./util/seed";
 import SetupController from "./contollers/setupController";
 import { __PORT__ } from "./util/constants";
+import cors from "cors";
 
 console.log("starting");
 
@@ -12,6 +13,7 @@ sequelize.sync({ force: true }).then(() => {
 });
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 SetupController(app);
